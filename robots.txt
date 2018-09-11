@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Allow: /about/
+Allow: /archives/
+Allow: /tags/
+Disallow: /css/
+Disallow: /js/
+Disallow: /images/
+Disallow: /lib/
+Disallow: /files/
+
+Sitemap: https://blog.gzj.me/sitemap.xml
+Sitemap: https://blog.gzj.me/baidusitemap.xml

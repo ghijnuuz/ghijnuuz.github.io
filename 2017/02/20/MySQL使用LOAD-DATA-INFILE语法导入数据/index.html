@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="DtZZ8kQRIWXyj4vyrWHBpbyJffF_5LX4zROzJ38RRz4" />
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="NW1Qi1gtxK" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="LOAD DATA INFILE语法 1234567891011121314151617LOAD DATA [LOW_PRIORITY | CONCURRENT] [LOCAL] INFILE &apos;file_name&apos;    [REPLACE | IGNORE]    INTO TABLE tbl_name    [PARTITION (partition_name,...)]    [CHARAC">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL使用LOAD DATA INFILE语法导入数据">
+<meta property="og:url" content="https://blog.gzj.me/2017/02/20/MySQL使用LOAD-DATA-INFILE语法导入数据/index.html">
+<meta property="og:site_name" content="顾志军的博客">
+<meta property="og:description" content="LOAD DATA INFILE语法 1234567891011121314151617LOAD DATA [LOW_PRIORITY | CONCURRENT] [LOCAL] INFILE &apos;file_name&apos;    [REPLACE | IGNORE]    INTO TABLE tbl_name    [PARTITION (partition_name,...)]    [CHARAC">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-02-20T15:34:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL使用LOAD DATA INFILE语法导入数据">
+<meta name="twitter:description" content="LOAD DATA INFILE语法 1234567891011121314151617LOAD DATA [LOW_PRIORITY | CONCURRENT] [LOCAL] INFILE &apos;file_name&apos;    [REPLACE | IGNORE]    INTO TABLE tbl_name    [PARTITION (partition_name,...)]    [CHARAC">
+
+
+
+
+
+
+  <link rel="canonical" href="https://blog.gzj.me/2017/02/20/MySQL使用LOAD-DATA-INFILE语法导入数据/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>MySQL使用LOAD DATA INFILE语法导入数据 | 顾志军的博客</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-38425517-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-38425517-2');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?bd75b01ad2f7931d8a81ea35690f4dfe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">顾志军的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.gzj.me/2017/02/20/MySQL使用LOAD-DATA-INFILE语法导入数据/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="顾志军">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="顾志军的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL使用LOAD DATA INFILE语法导入数据
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-20 23:34:02" itemprop="dateCreated datePublished" datetime="2017-02-20T23:34:02+08:00">2017-02-20</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/20/MySQL使用LOAD-DATA-INFILE语法导入数据/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/02/20/MySQL使用LOAD-DATA-INFILE语法导入数据/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>LOAD DATA INFILE语法</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">LOAD</span> <span class="keyword">DATA</span> [<span class="keyword">LOW_PRIORITY</span> | <span class="keyword">CONCURRENT</span>] [<span class="keyword">LOCAL</span>] <span class="keyword">INFILE</span> <span class="string">'file_name'</span></span><br><span class="line">    [<span class="keyword">REPLACE</span> | <span class="keyword">IGNORE</span>]</span><br><span class="line">    <span class="keyword">INTO</span> <span class="keyword">TABLE</span> tbl_name</span><br><span class="line">    [<span class="keyword">PARTITION</span> (partition_name,...)]</span><br><span class="line">    [<span class="built_in">CHARACTER</span> <span class="keyword">SET</span> charset_name]</span><br><span class="line">    [&#123;<span class="keyword">FIELDS</span> | <span class="keyword">COLUMNS</span>&#125;</span><br><span class="line">        [<span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'string'</span>]</span><br><span class="line">        [[<span class="keyword">OPTIONALLY</span>] <span class="keyword">ENCLOSED</span> <span class="keyword">BY</span> <span class="string">'char'</span>]</span><br><span class="line">        [<span class="keyword">ESCAPED</span> <span class="keyword">BY</span> <span class="string">'char'</span>]</span><br><span class="line">    ]</span><br><span class="line">    [<span class="keyword">LINES</span></span><br><span class="line">        [<span class="keyword">STARTING</span> <span class="keyword">BY</span> <span class="string">'string'</span>]</span><br><span class="line">        [<span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'string'</span>]</span><br><span class="line">    ]</span><br><span class="line">    [<span class="keyword">IGNORE</span> <span class="built_in">number</span> &#123;<span class="keyword">LINES</span> | <span class="keyword">ROWS</span>&#125;]</span><br><span class="line">    [(col_name_or_user_var,...)]</span><br><span class="line">    [<span class="keyword">SET</span> col_name = expr,...]</span><br></pre></td></tr></table></figure>
+<p><a href="https://dev.mysql.com/doc/refman/5.7/en/load-data.html" target="_blank" rel="noopener">LOAD DATA INFILE</a>能以非常快的速度从文本文件中读取数据写入表中。如果要从表中读取数据并写入文件，可以使用SELECT … INTO OUTFILE。</p>
+<a id="more"></a>
+<p>file_name必须是一个字符串。</p>
+<p>LOCAL关键字影响文件的位置和错误处理，LOCAL仅在服务器和客户端都已配置为允许的情况下工作。</p>
+<ul>
+<li>如果指定LOCAL，则文件由客户端主机上的客户端程序读取并发送到服务器。该文件可以作为完整路径名称来指定其确切位置。如果给定为相对路径名，则相对于客户端程序启动的目录来解释文件名称。</li>
+<li>当使用带有LOCAL的LOAD DATA时，将在服务器的临时目录中创建文件的副本。这个临时目录是操作系统的临时目录，并且不能在MySQL服务器上进行配置。<ul>
+<li>如果未指定LOCAL，则文件必须位于服务器主机上，并由服务器直接读取。服务器使用以下规则查找文件：</li>
+<li>如果文件名是绝对路径名，则服务器直接只用这个文件名。</li>
+<li>如果文件名是具有./或../或~/等开头的相对路径名，则服务器将在数据目录中搜索文件。</li>
+<li>如果给出了没有前导组件的文件名，则服务器在默认数据库的数据库目录中查找文件。</li>
+</ul>
+</li>
+</ul>
+<p>在非LOCAL情况下，这些规则意味着./myfile.txt将从服务器的数据目录中读取文件，而myfile.txt将从默认数据库的数据库目录中读取文件。例如，如果db1是默认数据库，则以下LOAD DATA语句从db1的数据库目录读取文件data.txt，即使语句是将该文件显式加载到db2数据库中的表中：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">LOAD</span> <span class="keyword">DATA</span> <span class="keyword">INFILE</span> <span class="string">'data.txt'</span> <span class="keyword">INTO</span> <span class="keyword">TABLE</span> db2.my_table;</span><br></pre></td></tr></table></figure>
+<p>出于安全原因，当读取位于服务器上的文本文件时，必须是数据库目录中的文件，或者是运行数据库服务器的用户有权限读取的文件。</p>
+<p>使用LOCAL比让服务器直接访问文件慢一点，因为文件的内容必须通过客户端发送到服务器。</p>
+<p>LOCAL也会影响错误处理：</p>
+<ul>
+<li>使用LOAD DATA INFILE，数据解释错误和重复key错误将终止操作。</li>
+<li>使用LOAD DATA LOCAL INFILE，数据解释错误和重复key错误将变为警告，并且操作会继续，因为服务器无法在操作过程中停止文件的传输。</li>
+</ul>
+<p>REPLACE和IGNORE关键字，控制对唯一键重复的数据的处理：</p>
+<ul>
+<li>如果指定REPLACE，则输入行替换现有行。换句话说，具有与主键或唯一索引相同值的数据将替换现有的数据。</li>
+<li>如果指定IGNORE，则会丢弃和唯一键的值相同的数据。</li>
+<li>如果不指定任何选项，则行为取决于是否指定了LOCAL关键字。如果没有LOCAL，则在遇到重复的键值时会发生错误，并忽略文本文件的其余部分。使用LOCAL，默认行为与指定IGNORE时相同;这是因为服务器在中间没有办法停止文件的传输操作。</li>
+</ul>
+<p>FIELDS和LINES子句都是可选的，但是如果同时指定了两个子句，则FIELDS必须在LINES之前。</p>
+<p>如果指定FIELDS子句，则它的每个子条件(TERMINATED BY，[OPTIONALLY] ENCLOSED BY和ESCAPED BY)也是可选的，但必须至少指定其中一个。</p>
+<p>如果你没有指定FIELDS或LINES子句，默认值如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FIELDS TERMINATED BY '\t' ENCLOSED BY '' ESCAPED BY '\\'</span><br><span class="line">LINES TERMINATED BY '\n' STARTING BY ''</span><br></pre></td></tr></table></figure>
+<p>如果要读取的所有行都有一个要忽略的公共前缀，则可以使用LINES STARTING BY ‘prefix_string’跳过前缀及其前面的任何内容。如果一行不包括前缀，则跳过整行。假设语句如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">LOAD</span> <span class="keyword">DATA</span> <span class="keyword">INFILE</span> <span class="string">'/tmp/test.txt'</span> <span class="keyword">INTO</span> <span class="keyword">TABLE</span> <span class="keyword">test</span> </span><br><span class="line"><span class="keyword">FIELDS</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">','</span> <span class="keyword">LINES</span> <span class="keyword">STARTING</span> <span class="keyword">BY</span> <span class="string">'xxx'</span>;</span><br></pre></td></tr></table></figure>
+<p>如果数据文件是这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xxx&quot;abc&quot;,1</span><br><span class="line">something xxx&quot;def&quot;,2</span><br><span class="line">&quot;ghi&quot;,3</span><br></pre></td></tr></table></figure>
+<p>结果将是(“abc”,1)和(“def”,2)。文件中的第三行将被跳过，因为它不包含前缀。</p>
+<p>IGNORE number LINES选项可用于忽略文件开头的行。例如，可以使用IGNORE 1 LINES跳过包含列名的标题行：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">LOAD</span> <span class="keyword">DATA</span> <span class="keyword">INFILE</span> <span class="string">'/tmp/test.txt'</span> <span class="keyword">INTO</span> <span class="keyword">TABLE</span> <span class="keyword">test</span> <span class="keyword">IGNORE</span> <span class="number">1</span> <span class="keyword">LINES</span>;</span><br></pre></td></tr></table></figure>
+<p>LOAD DATA INFILE也可用于读取其它数据源的文件。例如，许多程序会使用以逗号分隔值（CSV）格式导出数据，每行的字段使用逗号分隔并用双引号括起来，并且第一行为列名。如果这种文件中的换行是\r\n，以下语句说明如何处理这种文件：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">LOAD</span> <span class="keyword">DATA</span> <span class="keyword">INFILE</span> <span class="string">'data.txt'</span> <span class="keyword">INTO</span> <span class="keyword">TABLE</span> tbl_name</span><br><span class="line">  <span class="keyword">FIELDS</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">','</span> <span class="keyword">ENCLOSED</span> <span class="keyword">BY</span> <span class="string">'"'</span></span><br><span class="line">  <span class="keyword">LINES</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'\r\n'</span></span><br><span class="line">  <span class="keyword">IGNORE</span> <span class="number">1</span> <span class="keyword">LINES</span>;</span><br></pre></td></tr></table></figure>
+<p>如果输入值不一定包含在引号内，请在ENCLOSED BY关键字之前使用OPTIONALLY。</p>
+<p>任何字段、行处理选项都可以是空字符串(”)。如果不为空，则FIELDS [OPTIONALLY] ENCLOSED BY和FIELDS ESCAPED BY的值必须为单个字符。FIELDS TERMINATED BY，LINES STARTING BY和LINES TERMINATED BY的值可以是多个字符。</p>
+<p>FIELDS [OPTIONALLY] ENCLOSED BY控制字段的值用哪个字符包含起来。</p>
+<p>FIELDS ESCAPED BY控制如何读取或写入特殊字符。如果FIELDS ESCAPED BY字符不为空，则会删除出现的该字符，并将后面的字符作为字段值的一部分。如果FIELDS ESCAPED BY字符为空，则不会发生转义序列解释。</p>
+<p>默认情况下，在LOAD DATA INFILE语句末尾未提供列名的列表时，输入的数据应包含表中的每个字段。如果想要只导入表中某些列的数据，请指定列名的列表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">LOAD</span> <span class="keyword">DATA</span> <span class="keyword">INFILE</span> <span class="string">'persondata.txt'</span> <span class="keyword">INTO</span> <span class="keyword">TABLE</span> persondata (col1,col2,...);</span><br></pre></td></tr></table></figure>
+<p>如果输入文件中的字段顺序与表中的列顺序不同，也必须指定列名的列表。否则，MySQL不知道如何将输入字段与表中的列匹配。</p>
+<p>列名的列表可以包含列名称或用户变量。对于用户变量，SET子句允许在对列进行赋值前，对其值进行转换。</p>
+<p>可以通过多种方式使用SET子句中的用户变量。以下示例直接使用第一个输入列作为t1.column1的值，第二个输入列设置为用户变量，并在进行除法运算之后赋值给t1.column2：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">LOAD</span> <span class="keyword">DATA</span> <span class="keyword">INFILE</span> <span class="string">'file.txt'</span></span><br><span class="line">  <span class="keyword">INTO</span> <span class="keyword">TABLE</span> t1</span><br><span class="line">  (column1, @var1)</span><br><span class="line">  <span class="keyword">SET</span> column2 = @var1/<span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+<p>SET子句可以使用不是从文件中读取的值。以下语句将当前时间赋值给column3：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">LOAD</span> <span class="keyword">DATA</span> <span class="keyword">INFILE</span> <span class="string">'file.txt'</span></span><br><span class="line">  <span class="keyword">INTO</span> <span class="keyword">TABLE</span> t1</span><br><span class="line">  (column1, column2)</span><br><span class="line">  <span class="keyword">SET</span> column3 = <span class="keyword">CURRENT_TIMESTAMP</span>;</span><br></pre></td></tr></table></figure>
+<p>还可以通过将输入值赋值给用户变量，并且不将用户变量赋值给表的列来丢弃这个字段：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">LOAD</span> <span class="keyword">DATA</span> <span class="keyword">INFILE</span> <span class="string">'file.txt'</span></span><br><span class="line">  <span class="keyword">INTO</span> <span class="keyword">TABLE</span> t1</span><br><span class="line">  (column1, @dummy, column2, @dummy, column3);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/04/免费SSL证书Let’s-Encrypt-Certbot-，让网站支持HTTPS/" rel="next" title="免费SSL证书Let’s Encrypt(Certbot)，让网站支持HTTPS">
+                <i class="fa fa-chevron-left"></i> 免费SSL证书Let’s Encrypt(Certbot)，让网站支持HTTPS
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/05/Java中使用LinkedHashMap实现LRU缓存/" rel="prev" title="Java中使用LinkedHashMap实现LRU缓存">
+                Java中使用LinkedHashMap实现LRU缓存 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">顾志军</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">47</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:ghijnuuz@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ghijnuuz" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/ghijnuuz" target="_blank" title="知乎"><i class="fa fa-fw fa-globe"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.douban.com/people/ghijnuuz" target="_blank" title="豆瓣"><i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 – <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">顾志军</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.1</div>
+
+
+
+  <div class="footer-custom"><p>Hosted by <a href="https://pages.coding.me">Coding Pages</a></p></div>
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://blog-gzj-me.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://blog.gzj.me/2017/02/20/MySQL使用LOAD-DATA-INFILE语法导入数据/';
+        this.page.identifier = '2017/02/20/MySQL使用LOAD-DATA-INFILE语法导入数据/';
+        this.page.title = 'MySQL使用LOAD DATA INFILE语法导入数据';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://blog-gzj-me.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

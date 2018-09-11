@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="DtZZ8kQRIWXyj4vyrWHBpbyJffF_5LX4zROzJ38RRz4" />
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="NW1Qi1gtxK" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="简介Sharding-JDBC是一个开源的分布式数据库中间件，它无需额外部署和依赖，旧代码迁移成本几乎为零。Sharding-JDBC作为面向开发的微服务云原生基础类库，完整的实现了分库分表、读写分离和分布式主键功能，并初步实现了柔性事务。">
+<meta name="keywords" content="Java,Sharding-JDBC,分库分表,读写分离">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式数据库中间件Sharding-JDBC">
+<meta property="og:url" content="https://blog.gzj.me/2017/11/01/分布式数据库中间件Sharding-JDBC/index.html">
+<meta property="og:site_name" content="顾志军的博客">
+<meta property="og:description" content="简介Sharding-JDBC是一个开源的分布式数据库中间件，它无需额外部署和依赖，旧代码迁移成本几乎为零。Sharding-JDBC作为面向开发的微服务云原生基础类库，完整的实现了分库分表、读写分离和分布式主键功能，并初步实现了柔性事务。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-01T07:17:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分布式数据库中间件Sharding-JDBC">
+<meta name="twitter:description" content="简介Sharding-JDBC是一个开源的分布式数据库中间件，它无需额外部署和依赖，旧代码迁移成本几乎为零。Sharding-JDBC作为面向开发的微服务云原生基础类库，完整的实现了分库分表、读写分离和分布式主键功能，并初步实现了柔性事务。">
+
+
+
+
+
+
+  <link rel="canonical" href="https://blog.gzj.me/2017/11/01/分布式数据库中间件Sharding-JDBC/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>分布式数据库中间件Sharding-JDBC | 顾志军的博客</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-38425517-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-38425517-2');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?bd75b01ad2f7931d8a81ea35690f4dfe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">顾志军的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.gzj.me/2017/11/01/分布式数据库中间件Sharding-JDBC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="顾志军">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="顾志军的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">分布式数据库中间件Sharding-JDBC
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-11-01 15:17:21" itemprop="dateCreated datePublished" datetime="2017-11-01T15:17:21+08:00">2017-11-01</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/01/分布式数据库中间件Sharding-JDBC/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/01/分布式数据库中间件Sharding-JDBC/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p><a href="http://shardingjdbc.io/index_zh.html" target="_blank" rel="noopener">Sharding-JDBC</a>是一个开源的分布式数据库中间件，它无需额外部署和依赖，旧代码迁移成本几乎为零。Sharding-JDBC作为面向开发的微服务云原生基础类库，完整的实现了分库分表、读写分离和分布式主键功能，并初步实现了柔性事务。</p>
+<a id="more"></a>
+<h4 id="功能列表"><a href="#功能列表" class="headerlink" title="功能列表"></a>功能列表</h4><h5 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h5><ul>
+<li>解析功能完善。支持聚合、分组、排序、分页和关联查询</li>
+<li>分片策略灵活。支持=，BETWEEN，IN等多维度分片；支持自定义分片策略</li>
+<li>支持基于Hint的强制分片路由</li>
+</ul>
+<h5 id="读写分离"><a href="#读写分离" class="headerlink" title="读写分离"></a>读写分离</h5><ul>
+<li>支持一主多从的读写分离，可配合分库分表使用</li>
+<li>支持基于Hint的强制主库路由</li>
+</ul>
+<h5 id="柔性事务"><a href="#柔性事务" class="headerlink" title="柔性事务"></a>柔性事务</h5><ul>
+<li>最大努力送达型事务</li>
+<li>TCC型事务(TBD)</li>
+</ul>
+<h5 id="分布式主键"><a href="#分布式主键" class="headerlink" title="分布式主键"></a>分布式主键</h5><ul>
+<li>内置分布式序列生成器</li>
+<li>可自定义的分布式序列生成器</li>
+<li>完美的兼容JDBC标准协议</li>
+</ul>
+<h5 id="多样化配置"><a href="#多样化配置" class="headerlink" title="多样化配置"></a>多样化配置</h5><ul>
+<li>Java编码方式配置</li>
+<li>自定义Spring命名空间配置</li>
+<li>YAML方式配置</li>
+<li>Inline表达式配置分片策略</li>
+</ul>
+<h5 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h5><ul>
+<li>适用于任何java的ORM框架，如：JPA, Hibernate, Mybatis或直接使用JDBC</li>
+<li>适用于任何数据库连接池，如：DBCP, C3P0, BoneCP, Druid等</li>
+<li>理论上可支持任意实现JDBC规范的数据库。目前支持MySQL，Oracle，SQLServer和PostgreSQL</li>
+</ul>
+<h4 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h4><h5 id="LogicTable"><a href="#LogicTable" class="headerlink" title="LogicTable"></a>LogicTable</h5><p>数据分片的逻辑表，对于水平拆分的数据库(表)，同一类表的总称。例：订单数据根据主键尾数拆分为10张表,分别是t_order_0到t_order_9，他们的逻辑表名为t_order。</p>
+<h5 id="ActualTable"><a href="#ActualTable" class="headerlink" title="ActualTable"></a>ActualTable</h5><p>在分片的数据库中真实存在的物理表。即上个示例中的t_order_0到t_order_9。</p>
+<h5 id="DataNode"><a href="#DataNode" class="headerlink" title="DataNode"></a>DataNode</h5><p>数据分片的最小单元。由数据源名称和数据表组成，例：ds_1.t_order_0。配置时默认各个分片数据库的表结构均相同，直接配置逻辑表和真实表对应关系即可。如果各数据库的表结果不同，可使用ds.actual_table配置。</p>
+<h5 id="BindingTable"><a href="#BindingTable" class="headerlink" title="BindingTable"></a>BindingTable</h5><p>指在任何场景下分片规则均一致的主表和子表。例：订单表和订单项表，均按照订单ID分片，则此两张表互为BindingTable关系。BindingTable关系的多表关联查询不会出现笛卡尔积关联，关联查询效率将大大提升。</p>
+<h5 id="ShardingColumn"><a href="#ShardingColumn" class="headerlink" title="ShardingColumn"></a>ShardingColumn</h5><p>分片字段。用于将数据库(表)水平拆分的关键字段。例：订单表订单ID分片尾数取模分片，则订单ID为分片字段。SQL中如果无分片字段，将执行全路由，性能较差。Sharding-JDBC支持多分片字段。</p>
+<h5 id="ShardingAlgorithm"><a href="#ShardingAlgorithm" class="headerlink" title="ShardingAlgorithm"></a>ShardingAlgorithm</h5><p>分片算法。Sharding-JDBC通过分片算法将数据分片，支持通过等号、BETWEEN和IN分片。分片算法目前需要业务方开发者自行实现，可实现的灵活度非常高。未来Sharding-JDBC也将会实现常用分片算法，如range，hash和tag等。</p>
+<h5 id="SQL-Hint"><a href="#SQL-Hint" class="headerlink" title="SQL Hint"></a>SQL Hint</h5><p>对于分片字段非SQL决定，而由其他外置条件决定的场景，可使用SQL Hint灵活的注入分片字段。例：内部系统，按照员工登录ID分库，而数据库中并无此字段。SQL Hint支持通过ThreadLocal和SQL注释(待实现)两种方式使用。</p>
+<h4 id="性能测试报告"><a href="#性能测试报告" class="headerlink" title="性能测试报告"></a>性能测试报告</h4><p>这是官方的<a href="http://shardingjdbc.io/docs/01-start/stress-test/" target="_blank" rel="noopener">性能测试报告</a>，详情可以前往官网查看。</p>
+<h5 id="测试结果概述"><a href="#测试结果概述" class="headerlink" title="测试结果概述"></a>测试结果概述</h5><ol>
+<li>性能损耗测试：服务器资源充足、并发数相同，比较JDBC和Sharding-JDBC性能损耗，Sharding-JDBC相对JDBC损耗不超过7%</li>
+<li>性能对比测试：服务器资源使用到极限，相同的场景JDBC与Sharding-JDBC的吞吐量相当</li>
+<li>性能对比测试：服务器资源使用到极限，Sharding-JDBC采用分库分表后，Sharding-JDBC吞吐量较JDBC不分表有接近2倍的提升</li>
+<li>性能对比测试：服务器资源使用到极限，Sharding-JDBC V1.5.2与V1.4.2对比，性能比较稳定</li>
+</ol>
+<h5 id="基准测试性能对比"><a href="#基准测试性能对比" class="headerlink" title="基准测试性能对比"></a>基准测试性能对比</h5><table>
+<thead>
+<tr>
+<th style="text-align:left">业务场景</th>
+<th style="text-align:left">JDBC</th>
+<th style="text-align:left">Sharding-JDBC1.5.2</th>
+<th style="text-align:left">Sharding-JDBC1.5.2/JDBC损耗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">单库单表查询</td>
+<td style="text-align:left">493</td>
+<td style="text-align:left">470</td>
+<td style="text-align:left">4.7%</td>
+</tr>
+<tr>
+<td style="text-align:left">单库单表更新</td>
+<td style="text-align:left">6682</td>
+<td style="text-align:left">6303</td>
+<td style="text-align:left">5.7%</td>
+</tr>
+<tr>
+<td style="text-align:left">单库单表插入</td>
+<td style="text-align:left">6855</td>
+<td style="text-align:left">6375</td>
+<td style="text-align:left">7%</td>
+</tr>
+</tbody>
+</table>
+<h5 id="JDBC单库两库表与Sharding-JDBC两库各两表对比"><a href="#JDBC单库两库表与Sharding-JDBC两库各两表对比" class="headerlink" title="JDBC单库两库表与Sharding-JDBC两库各两表对比"></a>JDBC单库两库表与Sharding-JDBC两库各两表对比</h5><table>
+<thead>
+<tr>
+<th style="text-align:left">业务场景</th>
+<th style="text-align:left">JDBC单库两表</th>
+<th style="text-align:left">Sharding-JDBC两库各两表</th>
+<th style="text-align:left">性能提升至</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">查询</td>
+<td style="text-align:left">1736</td>
+<td style="text-align:left">3331</td>
+<td style="text-align:left">192%</td>
+</tr>
+<tr>
+<td style="text-align:left">更新</td>
+<td style="text-align:left">9170</td>
+<td style="text-align:left">17997</td>
+<td style="text-align:left">196%</td>
+</tr>
+<tr>
+<td style="text-align:left">插入</td>
+<td style="text-align:left">11574</td>
+<td style="text-align:left">23043</td>
+<td style="text-align:left">199%</td>
+</tr>
+</tbody>
+</table>
+<h5 id="JDBC单库单表与Sharding-JDBC两库各一表对比"><a href="#JDBC单库单表与Sharding-JDBC两库各一表对比" class="headerlink" title="JDBC单库单表与Sharding-JDBC两库各一表对比"></a>JDBC单库单表与Sharding-JDBC两库各一表对比</h5><table>
+<thead>
+<tr>
+<th style="text-align:left">业务场景</th>
+<th style="text-align:left">JDBC单库单表</th>
+<th style="text-align:left">Sharding-JDBC两库各一表</th>
+<th style="text-align:left">性能提升至</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">查询</td>
+<td style="text-align:left">1586</td>
+<td style="text-align:left">2944</td>
+<td style="text-align:left">185%</td>
+</tr>
+<tr>
+<td style="text-align:left">更新</td>
+<td style="text-align:left">9548</td>
+<td style="text-align:left">18561</td>
+<td style="text-align:left">194%</td>
+</tr>
+<tr>
+<td style="text-align:left">插入</td>
+<td style="text-align:left">11182</td>
+<td style="text-align:left">21414</td>
+<td style="text-align:left">192%</td>
+</tr>
+</tbody>
+</table>
+<h5 id="Sharding-JDBC-v1-4-2与v1-5-2版本对"><a href="#Sharding-JDBC-v1-4-2与v1-5-2版本对" class="headerlink" title="Sharding-JDBC v1.4.2与v1.5.2版本对"></a>Sharding-JDBC v1.4.2与v1.5.2版本对</h5><table>
+<thead>
+<tr>
+<th style="text-align:left">业务场景</th>
+<th style="text-align:left">Sharding-JDBC 1.4.2</th>
+<th style="text-align:left">Sharding-JDBC 1.5.2</th>
+<th style="text-align:left">1.5.2/1.4.2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">查询</td>
+<td style="text-align:left">2934</td>
+<td style="text-align:left">2944</td>
+<td style="text-align:left">100.34%</td>
+</tr>
+<tr>
+<td style="text-align:left">更新</td>
+<td style="text-align:left">18454</td>
+<td style="text-align:left">18561</td>
+<td style="text-align:left">100.58%</td>
+</tr>
+<tr>
+<td style="text-align:left">插入</td>
+<td style="text-align:left">21045</td>
+<td style="text-align:left">21414</td>
+<td style="text-align:left">101.75%</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Maven安装"><a href="#Maven安装" class="headerlink" title="Maven安装"></a>Maven安装</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 引入sharding-jdbc核心模块 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.shardingjdbc<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>sharding-jdbc-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;sharding-jdbc.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="使用示范"><a href="#使用示范" class="headerlink" title="使用示范"></a>使用示范</h4><p>表结构：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> dog_$&#123;<span class="keyword">index</span>&#125; (</span><br><span class="line">  <span class="keyword">id</span> <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  master_id <span class="built_in">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">50</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  age <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span>(<span class="keyword">id</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>数据库和表的分布：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">db_0</span><br><span class="line">  ├── dog_0</span><br><span class="line">  ├── dog_1</span><br><span class="line">  ├── dog_2</span><br><span class="line">  ├── dog_3</span><br><span class="line">  ├── dog_4</span><br><span class="line">  ├── dog_5</span><br><span class="line">  ├── dog_6</span><br><span class="line">  ├── dog_7</span><br><span class="line">  ├── dog_8</span><br><span class="line">  └── dog_9</span><br><span class="line">db_1</span><br><span class="line">  ├── dog_0</span><br><span class="line">  ├── dog_1</span><br><span class="line">  ├── dog_2</span><br><span class="line">  ├── dog_3</span><br><span class="line">  ├── dog_4</span><br><span class="line">  ├── dog_5</span><br><span class="line">  ├── dog_6</span><br><span class="line">  ├── dog_7</span><br><span class="line">  ├── dog_8</span><br><span class="line">  └── dog_9</span><br></pre></td></tr></table></figure>
+<h5 id="分库分表-1"><a href="#分库分表-1" class="headerlink" title="分库分表"></a>分库分表</h5><h6 id="单库单表"><a href="#单库单表" class="headerlink" title="单库单表"></a>单库单表</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 单库单表DataSource</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> SQLException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> DataSource <span class="title">getSingleDatabaseAndTableDataSource</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    <span class="comment">// region 数据源</span></span><br><span class="line">    Map&lt;String, DataSource&gt; dataSourceMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    BasicDataSource dataSource = <span class="keyword">new</span> BasicDataSource();</span><br><span class="line">    dataSource.setDriverClassName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">    dataSource.setUrl(<span class="string">"jdbc:mysql://localhost/db_0"</span>);</span><br><span class="line">    dataSource.setUsername(USERNAME);</span><br><span class="line">    dataSource.setPassword(PASSWORD);</span><br><span class="line">    dataSourceMap.put(<span class="string">"db"</span>, dataSource);</span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// region 表规则配置</span></span><br><span class="line">    TableRuleConfiguration dogTableRuleConfiguration = <span class="keyword">new</span> TableRuleConfiguration();</span><br><span class="line">    dogTableRuleConfiguration.setLogicTable(<span class="string">"dog"</span>); <span class="comment">// 逻辑表</span></span><br><span class="line">    dogTableRuleConfiguration.setActualDataNodes(<span class="string">"db.dog_0"</span>); <span class="comment">// 真实的数据节点</span></span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// region 分片规则</span></span><br><span class="line">    ShardingRuleConfiguration shardingRuleConfiguration = <span class="keyword">new</span> ShardingRuleConfiguration();</span><br><span class="line">    shardingRuleConfiguration.getTableRuleConfigs().add(dogTableRuleConfiguration);</span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfiguration);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="单库分表"><a href="#单库分表" class="headerlink" title="单库分表"></a>单库分表</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 单库分表DataSource</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> SQLException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> DataSource <span class="title">getShardingTableDataSource</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    <span class="comment">// region 数据源</span></span><br><span class="line">    Map&lt;String, DataSource&gt; dataSourceMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    BasicDataSource dataSource = <span class="keyword">new</span> BasicDataSource();</span><br><span class="line">    dataSource.setDriverClassName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">    dataSource.setUrl(<span class="string">"jdbc:mysql://localhost/db_0"</span>);</span><br><span class="line">    dataSource.setUsername(USERNAME);</span><br><span class="line">    dataSource.setPassword(PASSWORD);</span><br><span class="line">    dataSourceMap.put(<span class="string">"db"</span>, dataSource);</span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// region 表规则配置</span></span><br><span class="line">    TableRuleConfiguration dogTableRuleConfiguration = <span class="keyword">new</span> TableRuleConfiguration();</span><br><span class="line">    dogTableRuleConfiguration.setLogicTable(<span class="string">"dog"</span>); <span class="comment">// 逻辑表</span></span><br><span class="line">    dogTableRuleConfiguration.setActualDataNodes(<span class="string">"db.dog_$&#123;0..9&#125;"</span>); <span class="comment">// 真实的数据节点</span></span><br><span class="line">    dogTableRuleConfiguration.setTableShardingStrategyConfig(</span><br><span class="line">            <span class="keyword">new</span> InlineShardingStrategyConfiguration(<span class="string">"id"</span>, <span class="string">"dog_$&#123;id % 10&#125;"</span>)</span><br><span class="line">    ); <span class="comment">// 分表规则</span></span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// region 分片规则</span></span><br><span class="line">    ShardingRuleConfiguration shardingRuleConfiguration = <span class="keyword">new</span> ShardingRuleConfiguration();</span><br><span class="line">    shardingRuleConfiguration.getTableRuleConfigs().add(dogTableRuleConfiguration);</span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfiguration);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="分库分表-2"><a href="#分库分表-2" class="headerlink" title="分库分表"></a>分库分表</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 分库分表DataSource</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> SQLException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> DataSource <span class="title">getShardingDatabaseAndTableDataSource</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    <span class="comment">// region 数据源</span></span><br><span class="line">    Map&lt;String, DataSource&gt; dataSourceMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 配置第一个数据源</span></span><br><span class="line">    BasicDataSource dataSource0 = <span class="keyword">new</span> BasicDataSource();</span><br><span class="line">    dataSource0.setDriverClassName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">    dataSource0.setUrl(<span class="string">"jdbc:mysql://localhost/db_0"</span>);</span><br><span class="line">    dataSource0.setUsername(USERNAME);</span><br><span class="line">    dataSource0.setPassword(PASSWORD);</span><br><span class="line">    dataSourceMap.put(<span class="string">"db_0"</span>, dataSource0);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 配置第二个数据源</span></span><br><span class="line">    BasicDataSource dataSource1 = <span class="keyword">new</span> BasicDataSource();</span><br><span class="line">    dataSource1.setDriverClassName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">    dataSource1.setUrl(<span class="string">"jdbc:mysql://localhost/db_1"</span>);</span><br><span class="line">    dataSource1.setUsername(USERNAME);</span><br><span class="line">    dataSource1.setPassword(PASSWORD);</span><br><span class="line">    dataSourceMap.put(<span class="string">"db_1"</span>, dataSource1);</span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// region 表规则配置</span></span><br><span class="line">    TableRuleConfiguration dogTableRuleConfiguration = <span class="keyword">new</span> TableRuleConfiguration();</span><br><span class="line">    dogTableRuleConfiguration.setLogicTable(<span class="string">"dog"</span>); <span class="comment">// 逻辑表</span></span><br><span class="line">    dogTableRuleConfiguration.setActualDataNodes(<span class="string">"db_$&#123;0..1&#125;.dog_$&#123;0..9&#125;"</span>); <span class="comment">// 真实的数据节点</span></span><br><span class="line">    dogTableRuleConfiguration.setDatabaseShardingStrategyConfig(</span><br><span class="line">            <span class="keyword">new</span> InlineShardingStrategyConfiguration(<span class="string">"master_id"</span>, <span class="string">"db_$&#123;master_id % 2&#125;"</span>)</span><br><span class="line">    ); <span class="comment">// 分库规则</span></span><br><span class="line">    dogTableRuleConfiguration.setTableShardingStrategyConfig(</span><br><span class="line">            <span class="keyword">new</span> InlineShardingStrategyConfiguration(<span class="string">"id"</span>, <span class="string">"dog_$&#123;id % 10&#125;"</span>)</span><br><span class="line">    ); <span class="comment">// 分表规则</span></span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// region 分片规则</span></span><br><span class="line">    ShardingRuleConfiguration shardingRuleConfiguration = <span class="keyword">new</span> ShardingRuleConfiguration();</span><br><span class="line">    shardingRuleConfiguration.getTableRuleConfigs().add(dogTableRuleConfiguration);</span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfiguration);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="读写分离-1"><a href="#读写分离-1" class="headerlink" title="读写分离"></a>读写分离</h5><p>为了缓解数据库压力，将写入和读取操作分离为不同数据源，写库称为主库，读库称为从库，一主库可配置多从库。</p>
+<ul>
+<li>支持项<ol>
+<li>提供了一主多从的读写分离配置，可独立使用，也可配合分库分表使用。</li>
+<li>同一线程且同一数据库连接内，如有写入操作，以后的读操作均从主库读取，用于保证数据一致性。</li>
+<li>Spring命名空间。</li>
+<li>基于Hint的强制主库路由。</li>
+</ol>
+</li>
+<li>不支持范围<ol>
+<li>主库和从库的数据同步。</li>
+<li>主库和从库的数据同步延迟导致的数据不一致。</li>
+<li>主库双写或多写。</li>
+</ol>
+</li>
+</ul>
+<h6 id="读写分离-2"><a href="#读写分离-2" class="headerlink" title="读写分离"></a>读写分离</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 读写分离DataSource</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> SQLException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> DataSource <span class="title">getMasterSlaveDataSource</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    <span class="comment">// region 数据源</span></span><br><span class="line">    Map&lt;String, DataSource&gt; dataSourceMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 配置master数据源</span></span><br><span class="line">    BasicDataSource masterDataSource = <span class="keyword">new</span> BasicDataSource();</span><br><span class="line">    masterDataSource.setDriverClassName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">    masterDataSource.setUrl(<span class="string">"jdbc:mysql://localhost/db_0"</span>);</span><br><span class="line">    masterDataSource.setUsername(USERNAME);</span><br><span class="line">    masterDataSource.setPassword(PASSWORD);</span><br><span class="line">    dataSourceMap.put(<span class="string">"masterDataSource"</span>, masterDataSource);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 配置slave数据源</span></span><br><span class="line">    BasicDataSource slaveDataSource = <span class="keyword">new</span> BasicDataSource();</span><br><span class="line">    slaveDataSource.setDriverClassName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">    slaveDataSource.setUrl(<span class="string">"jdbc:mysql://localhost/db_0"</span>);</span><br><span class="line">    slaveDataSource.setUsername(USERNAME);</span><br><span class="line">    slaveDataSource.setPassword(PASSWORD);</span><br><span class="line">    dataSourceMap.put(<span class="string">"slaveDataSource"</span>, slaveDataSource);</span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// region 读写分离配置</span></span><br><span class="line">    MasterSlaveRuleConfiguration masterSlaveRuleConfiguration = <span class="keyword">new</span> MasterSlaveRuleConfiguration();</span><br><span class="line">    masterSlaveRuleConfiguration.setName(<span class="string">"db_0"</span>);</span><br><span class="line">    masterSlaveRuleConfiguration.setMasterDataSourceName(<span class="string">"masterDataSource"</span>);</span><br><span class="line">    masterSlaveRuleConfiguration.getSlaveDataSourceNames().add(<span class="string">"slaveDataSource"</span>);</span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> MasterSlaveDataSourceFactory.createDataSource(dataSourceMap, masterSlaveRuleConfiguration);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="分库分表-读写分离"><a href="#分库分表-读写分离" class="headerlink" title="分库分表+读写分离"></a>分库分表+读写分离</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 分库分表+读写分离DataSource</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> SQLException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> DataSource <span class="title">getShardingAndMasterSlaveDataSource</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    <span class="comment">// region 数据源</span></span><br><span class="line">    Map&lt;String, DataSource&gt; dataSourceMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// db_0 master</span></span><br><span class="line">    BasicDataSource masterDataSource0 = <span class="keyword">new</span> BasicDataSource();</span><br><span class="line">    masterDataSource0.setDriverClassName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">    masterDataSource0.setUrl(<span class="string">"jdbc:mysql://localhost/db_0"</span>);</span><br><span class="line">    masterDataSource0.setUsername(USERNAME);</span><br><span class="line">    masterDataSource0.setPassword(PASSWORD);</span><br><span class="line">    dataSourceMap.put(<span class="string">"masterDataSource0"</span>, masterDataSource0);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// db_0 slave</span></span><br><span class="line">    BasicDataSource slaveDataSource0 = <span class="keyword">new</span> BasicDataSource();</span><br><span class="line">    slaveDataSource0.setDriverClassName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">    slaveDataSource0.setUrl(<span class="string">"jdbc:mysql://localhost/db_0"</span>);</span><br><span class="line">    slaveDataSource0.setUsername(USERNAME);</span><br><span class="line">    slaveDataSource0.setPassword(PASSWORD);</span><br><span class="line">    dataSourceMap.put(<span class="string">"slaveDataSource0"</span>, slaveDataSource0);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// db_1 master</span></span><br><span class="line">    BasicDataSource masterDataSource1 = <span class="keyword">new</span> BasicDataSource();</span><br><span class="line">    masterDataSource1.setDriverClassName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">    masterDataSource1.setUrl(<span class="string">"jdbc:mysql://localhost/db_1"</span>);</span><br><span class="line">    masterDataSource1.setUsername(USERNAME);</span><br><span class="line">    masterDataSource1.setPassword(PASSWORD);</span><br><span class="line">    dataSourceMap.put(<span class="string">"masterDataSource1"</span>, masterDataSource1);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// db_1 slave</span></span><br><span class="line">    BasicDataSource slaveDataSource1 = <span class="keyword">new</span> BasicDataSource();</span><br><span class="line">    slaveDataSource1.setDriverClassName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line">    slaveDataSource1.setUrl(<span class="string">"jdbc:mysql://localhost/db_1"</span>);</span><br><span class="line">    slaveDataSource1.setUsername(USERNAME);</span><br><span class="line">    slaveDataSource1.setPassword(PASSWORD);</span><br><span class="line">    dataSourceMap.put(<span class="string">"slaveDataSource1"</span>, slaveDataSource1);</span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// region 读写分离配置</span></span><br><span class="line">    MasterSlaveRuleConfiguration masterSlaveRuleConfiguration0 = <span class="keyword">new</span> MasterSlaveRuleConfiguration();</span><br><span class="line">    masterSlaveRuleConfiguration0.setName(<span class="string">"db_0"</span>);</span><br><span class="line">    masterSlaveRuleConfiguration0.setMasterDataSourceName(<span class="string">"masterDataSource0"</span>);</span><br><span class="line">    masterSlaveRuleConfiguration0.getSlaveDataSourceNames().add(<span class="string">"slaveDataSource0"</span>);</span><br><span class="line"></span><br><span class="line">    MasterSlaveRuleConfiguration masterSlaveRuleConfiguration1 = <span class="keyword">new</span> MasterSlaveRuleConfiguration();</span><br><span class="line">    masterSlaveRuleConfiguration1.setName(<span class="string">"db_1"</span>);</span><br><span class="line">    masterSlaveRuleConfiguration1.setMasterDataSourceName(<span class="string">"masterDataSource1"</span>);</span><br><span class="line">    masterSlaveRuleConfiguration1.getSlaveDataSourceNames().add(<span class="string">"slaveDataSource1"</span>);</span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// region 表规则配置</span></span><br><span class="line">    TableRuleConfiguration dogTableRuleConfiguration = <span class="keyword">new</span> TableRuleConfiguration();</span><br><span class="line">    dogTableRuleConfiguration.setLogicTable(<span class="string">"dog"</span>); <span class="comment">// 逻辑表</span></span><br><span class="line">    dogTableRuleConfiguration.setActualDataNodes(<span class="string">"db_$&#123;0..1&#125;.dog_$&#123;0..9&#125;"</span>); <span class="comment">// 真实的数据节点</span></span><br><span class="line">    dogTableRuleConfiguration.setDatabaseShardingStrategyConfig(</span><br><span class="line">            <span class="keyword">new</span> InlineShardingStrategyConfiguration(<span class="string">"master_id"</span>, <span class="string">"db_$&#123;master_id % 2&#125;"</span>)</span><br><span class="line">    ); <span class="comment">// 分库规则</span></span><br><span class="line">    dogTableRuleConfiguration.setTableShardingStrategyConfig(</span><br><span class="line">            <span class="keyword">new</span> InlineShardingStrategyConfiguration(<span class="string">"id"</span>, <span class="string">"dog_$&#123;id % 10&#125;"</span>)</span><br><span class="line">    ); <span class="comment">// 分表规则</span></span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// region 分片规则</span></span><br><span class="line">    ShardingRuleConfiguration shardingRuleConfiguration = <span class="keyword">new</span> ShardingRuleConfiguration();</span><br><span class="line">    shardingRuleConfiguration.getTableRuleConfigs().add(dogTableRuleConfiguration);</span><br><span class="line">    shardingRuleConfiguration.getMasterSlaveRuleConfigs().add(masterSlaveRuleConfiguration0);</span><br><span class="line">    shardingRuleConfiguration.getMasterSlaveRuleConfigs().add(masterSlaveRuleConfiguration1);</span><br><span class="line">    <span class="comment">// endregion</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfiguration);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/Sharding-JDBC/" rel="tag"># Sharding-JDBC</a>
+          
+            <a href="/tags/分库分表/" rel="tag"># 分库分表</a>
+          
+            <a href="/tags/读写分离/" rel="tag"># 读写分离</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/20/使用Lombok简化Java代码/" rel="next" title="使用Lombok简化Java代码">
+                <i class="fa fa-chevron-left"></i> 使用Lombok简化Java代码
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/18/Java异步编程CompletableFuture/" rel="prev" title="Java异步编程CompletableFuture">
+                Java异步编程CompletableFuture <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">顾志军</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">47</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:ghijnuuz@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ghijnuuz" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/ghijnuuz" target="_blank" title="知乎"><i class="fa fa-fw fa-globe"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.douban.com/people/ghijnuuz" target="_blank" title="豆瓣"><i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#功能列表"><span class="nav-number">2.</span> <span class="nav-text">功能列表</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#分库分表"><span class="nav-number">2.1.</span> <span class="nav-text">分库分表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#读写分离"><span class="nav-number">2.2.</span> <span class="nav-text">读写分离</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#柔性事务"><span class="nav-number">2.3.</span> <span class="nav-text">柔性事务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#分布式主键"><span class="nav-number">2.4.</span> <span class="nav-text">分布式主键</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#多样化配置"><span class="nav-number">2.5.</span> <span class="nav-text">多样化配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#兼容性"><span class="nav-number">2.6.</span> <span class="nav-text">兼容性</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#核心概念"><span class="nav-number">3.</span> <span class="nav-text">核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#LogicTable"><span class="nav-number">3.1.</span> <span class="nav-text">LogicTable</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ActualTable"><span class="nav-number">3.2.</span> <span class="nav-text">ActualTable</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#DataNode"><span class="nav-number">3.3.</span> <span class="nav-text">DataNode</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#BindingTable"><span class="nav-number">3.4.</span> <span class="nav-text">BindingTable</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ShardingColumn"><span class="nav-number">3.5.</span> <span class="nav-text">ShardingColumn</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ShardingAlgorithm"><span class="nav-number">3.6.</span> <span class="nav-text">ShardingAlgorithm</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SQL-Hint"><span class="nav-number">3.7.</span> <span class="nav-text">SQL Hint</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#性能测试报告"><span class="nav-number">4.</span> <span class="nav-text">性能测试报告</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#测试结果概述"><span class="nav-number">4.1.</span> <span class="nav-text">测试结果概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基准测试性能对比"><span class="nav-number">4.2.</span> <span class="nav-text">基准测试性能对比</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#JDBC单库两库表与Sharding-JDBC两库各两表对比"><span class="nav-number">4.3.</span> <span class="nav-text">JDBC单库两库表与Sharding-JDBC两库各两表对比</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#JDBC单库单表与Sharding-JDBC两库各一表对比"><span class="nav-number">4.4.</span> <span class="nav-text">JDBC单库单表与Sharding-JDBC两库各一表对比</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Sharding-JDBC-v1-4-2与v1-5-2版本对"><span class="nav-number">4.5.</span> <span class="nav-text">Sharding-JDBC v1.4.2与v1.5.2版本对</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Maven安装"><span class="nav-number">5.</span> <span class="nav-text">Maven安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用示范"><span class="nav-number">6.</span> <span class="nav-text">使用示范</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#分库分表-1"><span class="nav-number">6.1.</span> <span class="nav-text">分库分表</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#单库单表"><span class="nav-number">6.1.1.</span> <span class="nav-text">单库单表</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#单库分表"><span class="nav-number">6.1.2.</span> <span class="nav-text">单库分表</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#分库分表-2"><span class="nav-number">6.1.3.</span> <span class="nav-text">分库分表</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#读写分离-1"><span class="nav-number">6.2.</span> <span class="nav-text">读写分离</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#读写分离-2"><span class="nav-number">6.2.1.</span> <span class="nav-text">读写分离</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#分库分表-读写分离"><span class="nav-number">6.2.2.</span> <span class="nav-text">分库分表+读写分离</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 – <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">顾志军</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.1</div>
+
+
+
+  <div class="footer-custom"><p>Hosted by <a href="https://pages.coding.me">Coding Pages</a></p></div>
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://blog-gzj-me.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://blog.gzj.me/2017/11/01/分布式数据库中间件Sharding-JDBC/';
+        this.page.identifier = '2017/11/01/分布式数据库中间件Sharding-JDBC/';
+        this.page.title = '分布式数据库中间件Sharding-JDBC';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://blog-gzj-me.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

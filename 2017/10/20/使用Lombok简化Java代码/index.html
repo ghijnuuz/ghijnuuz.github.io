@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="DtZZ8kQRIWXyj4vyrWHBpbyJffF_5LX4zROzJ38RRz4" />
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="NW1Qi1gtxK" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Lombok简介Lombok项目是一个java库，可自动添加到编辑器和构建工具，加快java的开发。再也不用写getter或equals方法。提早使用java未来的功能，比如val等等。Lombok通过在编译时期将注解替换成具体的代码，实现了这些功能。">
+<meta name="keywords" content="Lombok,java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Lombok简化Java代码">
+<meta property="og:url" content="https://blog.gzj.me/2017/10/20/使用Lombok简化Java代码/index.html">
+<meta property="og:site_name" content="顾志军的博客">
+<meta property="og:description" content="Lombok简介Lombok项目是一个java库，可自动添加到编辑器和构建工具，加快java的开发。再也不用写getter或equals方法。提早使用java未来的功能，比如val等等。Lombok通过在编译时期将注解替换成具体的代码，实现了这些功能。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-10-20T08:48:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Lombok简化Java代码">
+<meta name="twitter:description" content="Lombok简介Lombok项目是一个java库，可自动添加到编辑器和构建工具，加快java的开发。再也不用写getter或equals方法。提早使用java未来的功能，比如val等等。Lombok通过在编译时期将注解替换成具体的代码，实现了这些功能。">
+
+
+
+
+
+
+  <link rel="canonical" href="https://blog.gzj.me/2017/10/20/使用Lombok简化Java代码/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>使用Lombok简化Java代码 | 顾志军的博客</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-38425517-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-38425517-2');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?bd75b01ad2f7931d8a81ea35690f4dfe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">顾志军的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.gzj.me/2017/10/20/使用Lombok简化Java代码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="顾志军">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="顾志军的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用Lombok简化Java代码
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-10-20 16:48:59" itemprop="dateCreated datePublished" datetime="2017-10-20T16:48:59+08:00">2017-10-20</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/20/使用Lombok简化Java代码/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/10/20/使用Lombok简化Java代码/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="Lombok简介"><a href="#Lombok简介" class="headerlink" title="Lombok简介"></a>Lombok简介</h4><p><a href="https://projectlombok.org/" target="_blank" rel="noopener">Lombok</a>项目是一个java库，可自动添加到编辑器和构建工具，加快java的开发。再也不用写getter或equals方法。提早使用java未来的功能，比如val等等。Lombok通过在编译时期将注解替换成具体的代码，实现了这些功能。</p>
+<a id="more"></a>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><h5 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h5><p>要配置任何构建工具使用Lombok，必须指定编译源代码需要使用Lombok依赖关系，但在运行、测试、部署代码时并不需要Lombok。通常称呼这种为provided依赖。下面介绍如何将Lombok和Maven构建工具集成在一起。</p>
+<p>添加Lombok到pom文件，把Lombok作为provided依赖项，添加到dependencies节点中。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.16.18<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h5 id="IntelliJ-IDEA"><a href="#IntelliJ-IDEA" class="headerlink" title="IntelliJ IDEA"></a>IntelliJ IDEA</h5><p><a href="https://www.jetbrains.com/idea/" target="_blank" rel="noopener">Jetbrains IntelliJ IDEA</a>兼容Lombok。</p>
+<p>在IDEA的Plugins中搜索Lombok Plugin，点击Install进行安装，安装完成后重启IDEA。</p>
+<h4 id="稳定功能"><a href="#稳定功能" class="headerlink" title="稳定功能"></a>稳定功能</h4><h5 id="val"><a href="#val" class="headerlink" title="val"></a>val</h5><p>简单的声明final局部变量。</p>
+<p>可以使用val作为局部变量的声明类型，而不用写出实际的对象类型。这么做的时候，会从初始化表达式推断出类型。这个局部变量也会成为final局部变量。这个功能仅适用于局部变量和foreach循环，不适用于字段。初始化表达式是必需的。</p>
+<p>val实际上是一种在Lombok包中存在的类的类型。必须import val才能工作（或者使用lombok.val作为类型）。</p>
+<p><strong>Lombok</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> lombok.val;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ValExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">example</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    val example = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">    example.add(<span class="string">"Hello, World!"</span>);</span><br><span class="line">    val foo = example.get(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> foo.toLowerCase();</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">example2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    val map = <span class="keyword">new</span> HashMap&lt;Integer, String&gt;();</span><br><span class="line">    map.put(<span class="number">0</span>, <span class="string">"zero"</span>);</span><br><span class="line">    map.put(<span class="number">5</span>, <span class="string">"five"</span>);</span><br><span class="line">    <span class="keyword">for</span> (val entry : map.entrySet()) &#123;</span><br><span class="line">      System.out.printf(<span class="string">"%d: %s\n"</span>, entry.getKey(), entry.getValue());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>翻译成Java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ValExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">example</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> ArrayList&lt;String&gt; example = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">    example.add(<span class="string">"Hello, World!"</span>);</span><br><span class="line">    <span class="keyword">final</span> String foo = example.get(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> foo.toLowerCase();</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">example2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> HashMap&lt;Integer, String&gt; map = <span class="keyword">new</span> HashMap&lt;Integer, String&gt;();</span><br><span class="line">    map.put(<span class="number">0</span>, <span class="string">"zero"</span>);</span><br><span class="line">    map.put(<span class="number">5</span>, <span class="string">"five"</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">final</span> Map.Entry&lt;Integer, String&gt; entry : map.entrySet()) &#123;</span><br><span class="line">      System.out.printf(<span class="string">"%d: %s\n"</span>, entry.getKey(), entry.getValue());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="NonNull"><a href="#NonNull" class="headerlink" title="@NonNull"></a>@NonNull</h5><p>不用再担心NullPointerException。</p>
+<p>可以在方法或构造方法的参数上使用@NonNull来让Lombok生成null检查语句。</p>
+<p>null检查语句<code>if (param == null) throw new NullPointerException(&quot;param&quot;);</code>会被插入到方法的最上方。对于构造方法，null检查语句会被插入到<code>this()</code>或者<code>super()</code>后面。</p>
+<p>如果方法顶部已经存在null检查语句，不会重复创建。</p>
+<p><strong>Lombok</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.NonNull;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NonNullExample</span> <span class="keyword">extends</span> <span class="title">Something</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">NonNullExample</span><span class="params">(@NonNull Person person)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(<span class="string">"Hello"</span>);</span><br><span class="line">    <span class="keyword">this</span>.name = person.getName();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>翻译成Java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.NonNull;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NonNullExample</span> <span class="keyword">extends</span> <span class="title">Something</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">NonNullExample</span><span class="params">(@NonNull Person person)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(<span class="string">"Hello"</span>);</span><br><span class="line">    <span class="keyword">if</span> (person == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"person"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.name = person.getName();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="Cleanup"><a href="#Cleanup" class="headerlink" title="@Cleanup"></a>@Cleanup</h5><p>自动资源管理，无需关心close()方法的调用。</p>
+<p>可以使用@Cleanup来让资源在代码作用域结束前被回收。可以像这样在局部变量申明前添加@Cleanup注解：<code>@Cleanup InputStream in = new FileInputStream(&quot;some/file&quot;);</code>。</p>
+<p>如果想要清理的资源没有<code>close()</code>方法，但是有其它无参数清理方法，可以指定清理方法的名字：<code>@Cleanup(&quot;dispose&quot;) org.eclipse.swt.widgets.CoolBar bar = new CoolBar(parent, 0);</code>。</p>
+<p>默认情况下，清理方法是<code>close()</code>。需要参数的清理方法不能使用<code>@Cleanup</code>。</p>
+<p><strong>Lombok</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.Cleanup;</span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CleanupExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="meta">@Cleanup</span> InputStream in = <span class="keyword">new</span> FileInputStream(args[<span class="number">0</span>]);</span><br><span class="line">    <span class="meta">@Cleanup</span> OutputStream out = <span class="keyword">new</span> FileOutputStream(args[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">byte</span>[] b = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">10000</span>];</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">      <span class="keyword">int</span> r = in.read(b);</span><br><span class="line">      <span class="keyword">if</span> (r == -<span class="number">1</span>) <span class="keyword">break</span>;</span><br><span class="line">      out.write(b, <span class="number">0</span>, r);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>翻译成Java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CleanupExample</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    InputStream in = <span class="keyword">new</span> FileInputStream(args[<span class="number">0</span>]);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      OutputStream out = <span class="keyword">new</span> FileOutputStream(args[<span class="number">1</span>]);</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">byte</span>[] b = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">10000</span>];</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">          <span class="keyword">int</span> r = in.read(b);</span><br><span class="line">          <span class="keyword">if</span> (r == -<span class="number">1</span>) <span class="keyword">break</span>;</span><br><span class="line">          out.write(b, <span class="number">0</span>, r);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (out != <span class="keyword">null</span>) &#123;</span><br><span class="line">          out.close();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (in != <span class="keyword">null</span>) &#123;</span><br><span class="line">        in.close();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="Getter-and-Setter"><a href="#Getter-and-Setter" class="headerlink" title="@Getter and @Setter"></a>@Getter and @Setter</h5><p>不用再写Getter和Setter方法了。</p>
+<p>可以在任何字段上添加<code>@Getter</code>或<code>@Setter</code>注解，Lombok会自动生成默认的getter/setter方法。</p>
+<p>默认getter方法单纯返回字段的值，如果字段名是<code>foo</code>，getter方法名是<code>getFoo</code>（如果字段类型是<code>boolean</code>，getter方法名是<code>isFoo</code>）。如果字段名是<code>foo</code>，默认setter方法名是<code>setFoo</code>，返回类型是<code>void</code>，有1个和字段相同类型的参数，单纯把参数的值赋值给字段。</p>
+<p>生成的getter/setter方法是<code>public</code>的，除非明确指定了<code>AccessLevel</code>。合法的访问等级有<code>PUBLIC</code>、<code>PROTECTED</code>、<code>PACKAGE</code>和<code>PRIVATE</code>。</p>
+<p>也可以在类上添加<code>@Getter</code>或<code>@Setter</code>注解。这和在类中所有非静态字段上添加注解是一样的效果。</p>
+<p>可以在任何字段上使用<code>AccessLevel.NONE</code>取消getter/setter的生成。这会覆盖类上的<code>@Getter</code>、<code>@Setter</code>或<code>@Data</code>注解。</p>
+<p><strong>Lombok</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.AccessLevel;</span><br><span class="line"><span class="keyword">import</span> lombok.Getter;</span><br><span class="line"><span class="keyword">import</span> lombok.Setter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GetterSetterExample</span> </span>&#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Age of the person. Water is wet.</span></span><br><span class="line"><span class="comment">   * </span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> age New value for this person's age. Sky is blue.</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> The current value of this person's age. Circles are round.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Getter</span> <span class="meta">@Setter</span> <span class="keyword">private</span> <span class="keyword">int</span> age = <span class="number">10</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Name of the person.</span></span><br><span class="line"><span class="comment">   * -- SETTER --</span></span><br><span class="line"><span class="comment">   * Changes the name of this person.</span></span><br><span class="line"><span class="comment">   * </span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> name The new value.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Setter</span>(AccessLevel.PROTECTED) <span class="keyword">private</span> String name;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> String.format(<span class="string">"%s (age: %d)"</span>, name, age);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>翻译成Java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GetterSetterExample</span> </span>&#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Age of the person. Water is wet.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> age = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Name of the person.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> String.format(<span class="string">"%s (age: %d)"</span>, name, age);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Age of the person. Water is wet.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> The current value of this person's age. Circles are round.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> age;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Age of the person. Water is wet.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> age New value for this person's age. Sky is blue.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Changes the name of this person.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> name The new value.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="ToString"><a href="#ToString" class="headerlink" title="@ToString"></a>@ToString</h5><p>任何类的定义都可以使用<code>@ToString</code>注解，让lombok生成<code>toString()</code>方法的实现。默认情况下，它将打印类名，以及每个字段的值，用逗号分隔。</p>
+<p>通过将<code>includeFieldNames</code>参数设置为true，可以让<code>toString()</code>方法在输出时添加字段名。</p>
+<p>默认情况下，将打印所有非静态字段。如果想跳过一些字段，可以在<code>exclude</code>参数中指定，每个指定的字段都不会被打印出来。或者，可以在<code>of</code>参数中指定希望打印的字段。</p>
+<p>通过将<code>callSuper</code>设置为true，可以将超类实现的<code>toString</code>输出内容包含到本类的输出。请注意，在<code>java.lang.Object</code>中默认的<code>toString()</code>实现几乎没有意义，因此不需要使用这个功能，除非正在扩展另一个类。</p>
+<p><strong>Lombok</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.ToString;</span><br><span class="line"></span><br><span class="line"><span class="meta">@ToString</span>(exclude=<span class="string">"id"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ToStringExample</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> STATIC_VAR = <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  <span class="keyword">private</span> Shape shape = <span class="keyword">new</span> Square(<span class="number">5</span>, <span class="number">10</span>);</span><br><span class="line">  <span class="keyword">private</span> String[] tags;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.getName();</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@ToString</span>(callSuper=<span class="keyword">true</span>, includeFieldNames=<span class="keyword">true</span>)</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Square</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> width, height;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Square</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.width = width;</span><br><span class="line">      <span class="keyword">this</span>.height = height;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>翻译成Java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ToStringExample</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> STATIC_VAR = <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  <span class="keyword">private</span> Shape shape = <span class="keyword">new</span> Square(<span class="number">5</span>, <span class="number">10</span>);</span><br><span class="line">  <span class="keyword">private</span> String[] tags;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.getName();</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Square</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> width, height;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Square</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.width = width;</span><br><span class="line">      <span class="keyword">this</span>.height = height;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"Square(super="</span> + <span class="keyword">super</span>.toString() + <span class="string">", width="</span> + <span class="keyword">this</span>.width + <span class="string">", height="</span> + <span class="keyword">this</span>.height + <span class="string">")"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"ToStringExample("</span> + <span class="keyword">this</span>.getName() + <span class="string">", "</span> + <span class="keyword">this</span>.shape + <span class="string">", "</span> + Arrays.deepToString(<span class="keyword">this</span>.tags) + <span class="string">")"</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="EqualsAndHashCode"><a href="#EqualsAndHashCode" class="headerlink" title="@EqualsAndHashCode"></a>@EqualsAndHashCode</h5><p>从对象的字段生成<code>hashCode</code>和<code>equals</code>的实现。</p>
+<p>任何类的定义都可以用<code>@EqualsAndHashCode</code>注解，让lombok生成<code>equals(Object other)</code>和<code>hashCode()</code>方法的实现。默认情况下，它将使用所有非静态的、非transient的字段，但是也可以在注解的可选<code>exclude</code>参数中排除更多字段。或者，可以在<code>of</code>参数中指定想要使用的字段。</p>
+<p>如果在继承了其他类的子类上使用<code>@EqualsAndHashCode</code>，这个特性会变得更加复杂。通常，为这种类自动生成一个<code>equals</code>和<code>hashCode</code>方法是一个坏主意，因为父类也定义了字段，它们也需要equals/hashCode代码，但这段代码不会生成。通过将<code>callSuper</code>设置为true，可以在生成的方法中包含父类的<code>equals</code>和<code>hashCode</code>方法。</p>
+<p><strong>Lombok</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.EqualsAndHashCode;</span><br><span class="line"></span><br><span class="line"><span class="meta">@EqualsAndHashCode</span>(exclude=&#123;<span class="string">"id"</span>, <span class="string">"shape"</span>&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EqualsAndHashCodeExample</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">int</span> transientVar = <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">double</span> score;</span><br><span class="line">  <span class="keyword">private</span> Shape shape = <span class="keyword">new</span> Square(<span class="number">5</span>, <span class="number">10</span>);</span><br><span class="line">  <span class="keyword">private</span> String[] tags;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@EqualsAndHashCode</span>(callSuper=<span class="keyword">true</span>)</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Square</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> width, height;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Square</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.width = width;</span><br><span class="line">      <span class="keyword">this</span>.height = height;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>翻译成Java</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EqualsAndHashCodeExample</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">int</span> transientVar = <span class="number">10</span>;</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">double</span> score;</span><br><span class="line">  <span class="keyword">private</span> Shape shape = <span class="keyword">new</span> Square(<span class="number">5</span>, <span class="number">10</span>);</span><br><span class="line">  <span class="keyword">private</span> String[] tags;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (o == <span class="keyword">this</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">if</span> (!(o <span class="keyword">instanceof</span> EqualsAndHashCodeExample)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    EqualsAndHashCodeExample other = (EqualsAndHashCodeExample) o;</span><br><span class="line">    <span class="keyword">if</span> (!other.canEqual((Object)<span class="keyword">this</span>)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.getName() == <span class="keyword">null</span> ? other.getName() != <span class="keyword">null</span> : !<span class="keyword">this</span>.getName().equals(other.getName())) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (Double.compare(<span class="keyword">this</span>.score, other.score) != <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (!Arrays.deepEquals(<span class="keyword">this</span>.tags, other.tags)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> PRIME = <span class="number">59</span>;</span><br><span class="line">    <span class="keyword">int</span> result = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">long</span> temp1 = Double.doubleToLongBits(<span class="keyword">this</span>.score);</span><br><span class="line">    result = (result*PRIME) + (<span class="keyword">this</span>.name == <span class="keyword">null</span> ? <span class="number">43</span> : <span class="keyword">this</span>.name.hashCode());</span><br><span class="line">    result = (result*PRIME) + (<span class="keyword">int</span>)(temp1 ^ (temp1 &gt;&gt;&gt; <span class="number">32</span>));</span><br><span class="line">    result = (result*PRIME) + Arrays.deepHashCode(<span class="keyword">this</span>.tags);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">canEqual</span><span class="params">(Object other)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> other <span class="keyword">instanceof</span> EqualsAndHashCodeExample;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Square</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> width, height;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Square</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.width = width;</span><br><span class="line">      <span class="keyword">this</span>.height = height;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (o == <span class="keyword">this</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">      <span class="keyword">if</span> (!(o <span class="keyword">instanceof</span> Square)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">      Square other = (Square) o;</span><br><span class="line">      <span class="keyword">if</span> (!other.canEqual((Object)<span class="keyword">this</span>)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">      <span class="keyword">if</span> (!<span class="keyword">super</span>.equals(o)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.width != other.width) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.height != other.height) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">final</span> <span class="keyword">int</span> PRIME = <span class="number">59</span>;</span><br><span class="line">      <span class="keyword">int</span> result = <span class="number">1</span>;</span><br><span class="line">      result = (result*PRIME) + <span class="keyword">super</span>.hashCode();</span><br><span class="line">      result = (result*PRIME) + <span class="keyword">this</span>.width;</span><br><span class="line">      result = (result*PRIME) + <span class="keyword">this</span>.height;</span><br><span class="line">      <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">canEqual</span><span class="params">(Object other)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> other <span class="keyword">instanceof</span> Square;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ToDo…</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Lombok/" rel="tag"># Lombok</a>
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/08/Redis单实例锁/" rel="next" title="Redis单实例锁">
+                <i class="fa fa-chevron-left"></i> Redis单实例锁
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/01/分布式数据库中间件Sharding-JDBC/" rel="prev" title="分布式数据库中间件Sharding-JDBC">
+                分布式数据库中间件Sharding-JDBC <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">顾志军</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">47</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:ghijnuuz@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ghijnuuz" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/ghijnuuz" target="_blank" title="知乎"><i class="fa fa-fw fa-globe"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.douban.com/people/ghijnuuz" target="_blank" title="豆瓣"><i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Lombok简介"><span class="nav-number">1.</span> <span class="nav-text">Lombok简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Maven"><span class="nav-number">2.1.</span> <span class="nav-text">Maven</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#IntelliJ-IDEA"><span class="nav-number">2.2.</span> <span class="nav-text">IntelliJ IDEA</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#稳定功能"><span class="nav-number">3.</span> <span class="nav-text">稳定功能</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#val"><span class="nav-number">3.1.</span> <span class="nav-text">val</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#NonNull"><span class="nav-number">3.2.</span> <span class="nav-text">@NonNull</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Cleanup"><span class="nav-number">3.3.</span> <span class="nav-text">@Cleanup</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Getter-and-Setter"><span class="nav-number">3.4.</span> <span class="nav-text">@Getter and @Setter</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ToString"><span class="nav-number">3.5.</span> <span class="nav-text">@ToString</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#EqualsAndHashCode"><span class="nav-number">3.6.</span> <span class="nav-text">@EqualsAndHashCode</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 – <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">顾志军</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.1</div>
+
+
+
+  <div class="footer-custom"><p>Hosted by <a href="https://pages.coding.me">Coding Pages</a></p></div>
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://blog-gzj-me.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://blog.gzj.me/2017/10/20/使用Lombok简化Java代码/';
+        this.page.identifier = '2017/10/20/使用Lombok简化Java代码/';
+        this.page.title = '使用Lombok简化Java代码';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://blog-gzj-me.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
