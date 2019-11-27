@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="DtZZ8kQRIWXyj4vyrWHBpbyJffF_5LX4zROzJ38RRz4" />
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="NW1Qi1gtxK" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="双十一前，乘着降价入手了群晖DS218+，用了1个月，写一下这段时间内都玩了什么。">
+<meta name="keywords" content="群晖,DS218+,MiniUPnP,UPnP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="入手群晖DS218+">
+<meta property="og:url" content="https://blog.gzj.me/2019/11/27/入手群晖DS218/index.html">
+<meta property="og:site_name" content="顾志军的博客">
+<meta property="og:description" content="双十一前，乘着降价入手了群晖DS218+，用了1个月，写一下这段时间内都玩了什么。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-27T05:21:37.095Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="入手群晖DS218+">
+<meta name="twitter:description" content="双十一前，乘着降价入手了群晖DS218+，用了1个月，写一下这段时间内都玩了什么。">
+
+
+
+
+
+
+  <link rel="canonical" href="https://blog.gzj.me/2019/11/27/入手群晖DS218/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>入手群晖DS218+ | 顾志军的博客</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-38425517-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-38425517-2');
+</script>
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?bd75b01ad2f7931d8a81ea35690f4dfe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">顾志军的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.gzj.me/2019/11/27/入手群晖DS218/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="顾志军">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="顾志军的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">入手群晖DS218+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-27 13:21:37" itemprop="dateCreated datePublished" datetime="2019-11-27T13:21:37+08:00">2019-11-27</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/27/入手群晖DS218/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/11/27/入手群晖DS218/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>双十一前，乘着降价入手了<a href="https://www.synology.cn/zh-cn/products/DS218+" target="_blank" rel="noopener">群晖DS218+</a>，用了1个月，写一下这段时间内都玩了什么。</p>
+<a id="more"></a>
+<h2 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h2><p>原装配置：</p>
+<ul>
+<li>CPU：INTEL Celeron J3355 2 GHz 2核心</li>
+<li>内存：2G</li>
+<li>硬盘：无</li>
+</ul>
+<p>官方资料说内存可以扩展到6G，也就是2G+4G。网上看到有网友安装8G内存扩展到10G内存成功，就上淘宝买了8G内存，成功扩容。</p>
+<p>又买了1块希捷企业级氦气10T硬盘，没有组RAID。</p>
+<p>升级后配置：</p>
+<ul>
+<li>CPU：INTEL Celeron J3355 2 GHz 2核心</li>
+<li>内存：10G</li>
+<li>硬盘：10T</li>
+</ul>
+<h2 id="文件存储"><a href="#文件存储" class="headerlink" title="文件存储"></a>文件存储</h2><p>有了NAS上的大容量硬盘，以前电脑、手机上的文件，都迁移到NAS上存储。</p>
+<h3 id="局域网访问"><a href="#局域网访问" class="headerlink" title="局域网访问"></a>局域网访问</h3><p>开启了SMB和AFP服务，共享文件给Mac、PC、iPhone。</p>
+<h3 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h3><p>使用Time Machine备份MacBook Pro到NAS上。</p>
+<p>使用iMazing备份iPhone到NAS上。</p>
+<h2 id="私有云存储-amp-公有云备份"><a href="#私有云存储-amp-公有云备份" class="headerlink" title="私有云存储&amp;公有云备份"></a>私有云存储&amp;公有云备份</h2><p>使用Synology Drive实现私有云存储，在多设备之间同步。</p>
+<p>使用Cloud Sync备份Synology Drive目录，同步到Office 365的OneDrive 1T空间中。</p>
+<p>使用Synology Moments照片解决方案，管理照片和视频，开启手机照片同步到Moments。</p>
+<h2 id="远程下载"><a href="#远程下载" class="headerlink" title="远程下载"></a>远程下载</h2><p>使用自带的Download Station下载BT、ed2k。</p>
+<h2 id="视频"><a href="#视频" class="headerlink" title="视频"></a>视频</h2><p>刚开始用自带的Video Station，效果不是很好。</p>
+<p>现在换成Plex Server + Kodi &amp; Plex插件方案，实现了出门也能看家里NAS上视频。</p>
+<p>后面还想试试jellyfin。</p>
+<h2 id="监控摄像头"><a href="#监控摄像头" class="headerlink" title="监控摄像头"></a>监控摄像头</h2><p>买了一个TP-Link网络摄像头放家里，使用ONVIF连接到群晖Surveillance Station，实现了家庭监控视频存储和远程观看监控视频的需求。</p>
+<h2 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h2><p>虚拟机上装了一个Windows 10系统，可以通过网页远程控制，由于虚拟机资源占用太多，只在应急时使用。</p>
+<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><p>DS218+还支持Docker，这是我选择这个型号的原因，可玩性大大增强。</p>
+<h2 id="远程访问"><a href="#远程访问" class="headerlink" title="远程访问"></a>远程访问</h2><p>群晖自带的QuickConnect可以让我离开家也能访问管理群晖，但是这个功能是通过群晖服务器中转的，速度有很大的限制。</p>
+<p>于是想到外网直连家里的NAS，打电话给电信开了外网IP。</p>
+<p>网上查了资料，由于家里的电信光猫是路由模式，并且没有超管密码，无法进入后台设置端口映射。</p>
+<p>找电信把光猫设置成桥接模式，需要小工上门操作，还要签一份保证书，由于工作日不在家，周末小工超级忙，一直没改。</p>
+<p>后来使用Plex后，发现Plex自动在光猫上开了端口，支持远程访问，推测使用了UPnP功能设置端口映射。</p>
+<p>那我也可以直接使用UPnP映射想要设置的端口，不需要光猫超管账号或设置光猫桥接模式。</p>
+<p>找到MiniUPnP的upnpc命令，成功在光猫上设置了端口映射，暂时只设置了DSM和Plex的端口。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/群晖/" rel="tag"># 群晖</a>
+          
+            <a href="/tags/DS218/" rel="tag"># DS218+</a>
+          
+            <a href="/tags/MiniUPnP/" rel="tag"># MiniUPnP</a>
+          
+            <a href="/tags/UPnP/" rel="tag"># UPnP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/03/创建自己的Spring-Boot-Starter/" rel="next" title="创建自己的Spring Boot Starter">
+                <i class="fa fa-chevron-left"></i> 创建自己的Spring Boot Starter
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">顾志军</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:ghijnuuz@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/ghijnuuz" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/ghijnuuz" target="_blank" title="知乎"><i class="fa fa-fw fa-globe"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.douban.com/people/ghijnuuz" target="_blank" title="豆瓣"><i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#硬件"><span class="nav-number">1.</span> <span class="nav-text">硬件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件存储"><span class="nav-number">2.</span> <span class="nav-text">文件存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#局域网访问"><span class="nav-number">2.1.</span> <span class="nav-text">局域网访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#备份"><span class="nav-number">2.2.</span> <span class="nav-text">备份</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#私有云存储-amp-公有云备份"><span class="nav-number">3.</span> <span class="nav-text">私有云存储&amp;公有云备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#远程下载"><span class="nav-number">4.</span> <span class="nav-text">远程下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#视频"><span class="nav-number">5.</span> <span class="nav-text">视频</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#监控摄像头"><span class="nav-number">6.</span> <span class="nav-text">监控摄像头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟机"><span class="nav-number">7.</span> <span class="nav-text">虚拟机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker"><span class="nav-number">8.</span> <span class="nav-text">Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#远程访问"><span class="nav-number">9.</span> <span class="nav-text">远程访问</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 – <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">顾志军</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.1</div>
+
+
+
+  <div class="footer-custom"><p>Hosted by <a href="https://pages.coding.me">Coding Pages</a></p></div>
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://blog-gzj-me.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'https://blog.gzj.me/2019/11/27/入手群晖DS218/';
+        this.page.identifier = '2019/11/27/入手群晖DS218/';
+        this.page.title = '入手群晖DS218+';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://blog-gzj-me.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        loadComments();
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

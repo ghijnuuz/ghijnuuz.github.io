@@ -316,6 +316,160 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://blog.gzj.me/2017/02/20/MySQL使用LOAD-DATA-INFILE语法导入数据/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="顾志军">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="顾志军的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/02/20/MySQL使用LOAD-DATA-INFILE语法导入数据/" itemprop="url">
+                  MySQL使用LOAD DATA INFILE语法导入数据
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-02-20 23:34:02" itemprop="dateCreated datePublished" datetime="2017-02-20T23:34:02+08:00">2017-02-20</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/20/MySQL使用LOAD-DATA-INFILE语法导入数据/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/02/20/MySQL使用LOAD-DATA-INFILE语法导入数据/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>LOAD DATA INFILE语法</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">LOAD</span> <span class="keyword">DATA</span> [<span class="keyword">LOW_PRIORITY</span> | <span class="keyword">CONCURRENT</span>] [<span class="keyword">LOCAL</span>] <span class="keyword">INFILE</span> <span class="string">'file_name'</span></span><br><span class="line">    [<span class="keyword">REPLACE</span> | <span class="keyword">IGNORE</span>]</span><br><span class="line">    <span class="keyword">INTO</span> <span class="keyword">TABLE</span> tbl_name</span><br><span class="line">    [<span class="keyword">PARTITION</span> (partition_name,...)]</span><br><span class="line">    [<span class="built_in">CHARACTER</span> <span class="keyword">SET</span> charset_name]</span><br><span class="line">    [&#123;<span class="keyword">FIELDS</span> | <span class="keyword">COLUMNS</span>&#125;</span><br><span class="line">        [<span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'string'</span>]</span><br><span class="line">        [[<span class="keyword">OPTIONALLY</span>] <span class="keyword">ENCLOSED</span> <span class="keyword">BY</span> <span class="string">'char'</span>]</span><br><span class="line">        [<span class="keyword">ESCAPED</span> <span class="keyword">BY</span> <span class="string">'char'</span>]</span><br><span class="line">    ]</span><br><span class="line">    [<span class="keyword">LINES</span></span><br><span class="line">        [<span class="keyword">STARTING</span> <span class="keyword">BY</span> <span class="string">'string'</span>]</span><br><span class="line">        [<span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'string'</span>]</span><br><span class="line">    ]</span><br><span class="line">    [<span class="keyword">IGNORE</span> <span class="built_in">number</span> &#123;<span class="keyword">LINES</span> | <span class="keyword">ROWS</span>&#125;]</span><br><span class="line">    [(col_name_or_user_var,...)]</span><br><span class="line">    [<span class="keyword">SET</span> col_name = expr,...]</span><br></pre></td></tr></table></figure>
+<p><a href="https://dev.mysql.com/doc/refman/5.7/en/load-data.html" target="_blank" rel="noopener">LOAD DATA INFILE</a>能以非常快的速度从文本文件中读取数据写入表中。如果要从表中读取数据并写入文件，可以使用SELECT … INTO OUTFILE。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/02/20/MySQL使用LOAD-DATA-INFILE语法导入数据/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://blog.gzj.me/2017/02/04/免费SSL证书Let’s-Encrypt-Certbot-，让网站支持HTTPS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1110,7 +1264,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1229,7 +1383,21 @@
                     
                       
                     
-                    <span class="site-state-item-count">47</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1293,7 +1461,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 – <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2017 – <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
